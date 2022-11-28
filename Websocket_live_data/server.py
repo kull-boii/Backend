@@ -68,3 +68,4 @@ while True:
 
 # just in cmd type 
 # py server.py
+# https://towardsdatascience.com/websocket-retrieve-live-data-f539b1d9db1e
