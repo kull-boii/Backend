@@ -69,3 +69,9 @@ in browser open localhost:8080
 default nginx uses round robin.
 
 thus we have set up a load balancer exposed a single ip and a port and eventually we may scale our containers 
+
+make sure to stop and delete the containers and image
+
+to stop nginx type
+
+`nginx -s quit`
