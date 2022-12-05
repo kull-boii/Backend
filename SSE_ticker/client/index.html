@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE - Ticker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Ticker</h1>
+        <em id="data">Connecting....</em>
+        <button onclick="closeStream()">Close Stream</button>
+      </section>
+    </main>
+    <script>
+      const sseSource = new EventSource("http://127.0.0.1:8080/ticker");
+      sseSource.onmessage = function (event) {
+        const dataElement = document.getElementById("data");
+        const { ticker } = JSON.parse(event.data);
+        dataElement.textContent = ticker;
+      };
+      const closeStream = () => sseSource.close();
+    </script>
+  </body>
+</html>
