@@ -1,23 +1,32 @@
-const express = require("express");
 const connectDB = require("./db/connect");
+const express = require("express");
 const app = express();
-const connectDb = require("./db/connect");
-require("dotenv").config();
-
 const tasks = require("./routes/tasks");
+require("dotenv").config();
+const notFound = require("./middleware/not-found");
 
-//middleware
+// middleware
 app.use(express.json());
 app.use(express.static("public"));
 
-//routes
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
-
+// link url to route
 app.use("/api/v1/tasks", tasks);
 
+app.use(notFound);
+
 const port = 3000;
+
+// routes
+
+// app.get("api/v1/tasks")      - get all tasks
+// app.post("api/v1/tasks")     - create a new task
+// app.get("api/v1/tasks/:id")  - get a specific task
+// app.patch("api/v1/tasks/:id")  - update a specific task
+// app.delete("api/v1/tasks/:id")  - delete a specific task
+
+app.get("/hello", (req, res) => {
+  res.send("Task Manager app");
+});
 
 const start = async () => {
   try {
@@ -27,5 +36,4 @@ const start = async () => {
     console.log(error);
   }
 };
-
 start();
