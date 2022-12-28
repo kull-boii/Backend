@@ -1,6 +1,7 @@
 const Joi = require("joi");
+const CustomErrorHandler = require("../services/customErrorHandler");
 
-function register(req, res, next) {
+async function register(req, res, next) {
   /*
   Steps to register a user:
   - Validate a user
@@ -26,6 +27,16 @@ function register(req, res, next) {
 
   if (error) {
     return next(error);
+  }
+
+  // check if user is already in the DB
+  try {
+    const exist = await URLSearchParams.exists({ email: req.body.email });
+    if (exist) {
+      return next(CustomErrorHandler.alreadyExist("This Email Already exists"));
+    }
+  } catch (err) {
+    return next(err);
   }
 
   return res.send("Good");

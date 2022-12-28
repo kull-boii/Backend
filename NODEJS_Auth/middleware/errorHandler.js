@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { ValidationError } = require("joi");
+const CustomErrorHandler = require("../services/customErrorHandler");
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = 500;
@@ -16,7 +17,17 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // custom errors (email exists)
+  if (err instanceof CustomErrorHandler) {
+    statusCode = err.status;
+    data = {
+      message: err.message,
+    };
+  }
+
   return res.status(statusCode).json(data);
 };
 
 module.exports = errorHandler;
+
+// our custom error handler cannot handle errors recieved from a promise
