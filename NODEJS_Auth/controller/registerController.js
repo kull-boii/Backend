@@ -1,5 +1,9 @@
 const Joi = require("joi");
+const bcrypt = require("bcrypt");
 const CustomErrorHandler = require("../services/customErrorHandler");
+
+const User = require("../models/user");
+const JwtService = require("../services/JwtService");
 
 async function register(req, res, next) {
   /*
@@ -31,7 +35,7 @@ async function register(req, res, next) {
 
   // check if user is already in the DB
   try {
-    const exist = await URLSearchParams.exists({ email: req.body.email });
+    const exist = await User.exists({ email: req.body.email });
     if (exist) {
       return next(CustomErrorHandler.alreadyExist("This Email Already exists"));
     }
@@ -39,7 +43,31 @@ async function register(req, res, next) {
     return next(err);
   }
 
-  return res.send("Good");
+  // destructre
+  const { name, email, password } = req.body;
+
+  // hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const userProfile = new User({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  let access_token;
+  try {
+    const result = await userProfile.save();
+    console.log(result);
+    access_token = JwtService.sign({
+      _id: result._id,
+      role: result.role,
+    });
+  } catch (err) {
+    return next(err);
+  }
+
+  return res.json({ access_token });
 }
 
 module.exports = { register };
