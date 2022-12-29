@@ -15,6 +15,15 @@ class CustomErrorHandler extends Error {
   static wrongCredentials(message = "Username or password is wrong") {
     return new CustomErrorHandler(401, message);
   }
+
+  // if token not present/invalid token
+  static unAuthroized(message = "unAuthorized") {
+    return new CustomErrorHandler(401, message);
+  }
+
+  static notFound(message = "Not Found") {
+    return new CustomErrorHandler(404, message);
+  }
 }
 
 module.exports = CustomErrorHandler;
