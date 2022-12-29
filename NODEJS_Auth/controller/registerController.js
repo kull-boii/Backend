@@ -1,7 +1,6 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const CustomErrorHandler = require("../services/customErrorHandler");
-
 const User = require("../models/user");
 const JwtService = require("../services/JwtService");
 
